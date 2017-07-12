@@ -1,14 +1,21 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 project(openslam_gmapping)
 
-find_package(catkin)
+# Add support for C++11
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 11)
+endif()
 
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES gridfastslam scanmatcher sensor_base sensor_range sensor_odometry utils
-)
+find_package(ament_cmake REQUIRED)
 
-include_directories(include)
+set(INCLUDE_DIRS include ${ament_cmake_INCLUDE_DIRS})
+include_directories(${INCLUDE_DIRS})
+
+set(LIBRARY_DIRS ${ament_cmake_LIBRARY_DIRS})
+
+link_directories(${LIBRARY_DIRS})
+
+set(LIBS ${ament_cmake_LIBRARIES})
 
 add_subdirectory(gridfastslam)
 add_subdirectory(scanmatcher)
@@ -20,8 +27,21 @@ if(0)
 endif()
 
 install(DIRECTORY include/
-  DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
-                 PATTERN "*.hxx"
-  PATTERN ".svn" EXCLUDE
-)
+  DESTINATION include
+  FILES_MATCHING
+  PATTERN "*.h"
+  PATTERN "*.hxx"
+  PATTERN ".svn"
+  EXCLUDE)
+
+ament_export_dependencies(ament_cmake)
+ament_export_include_directories(${INCLUDE_DIRS})
+ament_export_libraries(
+  gridfastslam
+  scanmatcher
+  sensor_base
+  sensor_odometry
+  sensor_range
+  utils)
+
+ament_package()

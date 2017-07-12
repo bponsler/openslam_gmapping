@@ -1,4 +1,4 @@
-add_library(gridfastslam
+add_library(gridfastslam SHARED
     gfsreader.cpp
     gridslamprocessor.cpp
     gridslamprocessor_tree.cpp
@@ -6,4 +6,5 @@ add_library(gridfastslam
 )
 target_link_libraries(gridfastslam scanmatcher sensor_range)
 
-install(TARGETS gridfastslam DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+install(TARGETS gridfastslam DESTINATION lib)
+
